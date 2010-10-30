@@ -93,6 +93,14 @@ libmoon_include_headers = 	\
 	pal/gtk/pixbuf-gtk.h	\
 	pal/gtk/window-gtk.h	\
 	pal/gtk/debug-ui.h	\
+	pal/cocoa/clipboard-cocoa.h	\
+	pal/cocoa/config-dialog-cocoa.h\
+	pal/cocoa/im-cocoa.h	\
+	pal/cocoa/install-dialog.h\
+	pal/cocoa/pal-cocoa.h	\
+	pal/cocoa/pixbuf-cocoa.h	\
+	pal/cocoa/window-cocoa.h	\
+	pal/cocoa/debug-ui.h	\
 	pal/messaging/glib/pal-glib-msg.h	\
 	pal/network/dbus/pal-dbus-network.h	\
 	pal/network/pal-linux-network.h	\
@@ -216,19 +224,6 @@ libmoon_la_SOURCES = 		\
 	openfile.cpp		\
 	pal/pal.cpp	\
 	pal/window.cpp		\
-	pal/capture/pal-linux-capture.cpp	\
-	pal/capture/v4l2/pal-v4l2-video-capture.cpp	\
-	pal/gtk/clipboard-gtk.cpp	\
-	pal/gtk/config-dialog-gtk.cpp\
-	pal/gtk/im-gtk.cpp	\
-	pal/gtk/install-dialog.cpp\
-	pal/gtk/pal-gtk.cpp	\
-	pal/gtk/pixbuf-gtk.cpp	\
-	pal/gtk/window-gtk.cpp	\
-	pal/gtk/debug-ui.cpp	\
-	pal/messaging/glib/pal-glib-msg.cpp	\
-	pal/network/dbus/pal-dbus-network.cpp	\
-	pal/network/pal-linux-network.cpp	\
 	panel.cpp		\
 	pipeline-asf.cpp	\
 	pipeline.cpp		\
@@ -283,6 +278,41 @@ libmoon_la_SOURCES = 		\
 	zip/ioapi.h		\
 	zip/unzip.c		\
 	zip/unzip.h
+
+
+if GTK_PAL
+libmoon_la_SOURCES += \
+	pal/gtk/clipboard-gtk.cpp	\
+	pal/gtk/config-dialog-gtk.cpp\
+	pal/gtk/im-gtk.cpp	\
+	pal/gtk/install-dialog.cpp\
+	pal/gtk/pal-gtk.cpp	\
+	pal/gtk/pixbuf-gtk.cpp	\
+	pal/gtk/window-gtk.cpp	\
+	pal/gtk/debug-ui.cpp	\
+endif
+
+if COCOA_PAL
+libmoon_la_SOURCES += \
+	pal/cocoa/clipboard-cocoa.cpp	\
+	pal/cocoa/config-dialog-cocoa.cpp\
+	pal/cocoa/im-cocoa.cpp	\
+	pal/cocoa/install-dialog.cpp\
+	pal/cocoa/pal-cocoa.cpp	\
+	pal/cocoa/pixbuf-cocoa.cpp	\
+	pal/cocoa/window-cocoa.cpp	\
+	pal/cocoa/debug-ui.cpp	\
+endif
+
+#FIXME: This should be individually guarded ot the pal backends, not lumped with GTK
+if GTK_PAL
+libmoon_la_SOURCES += \
+	pal/capture/pal-linux-capture.cpp	\
+	pal/capture/v4l2/pal-v4l2-video-capture.cpp	\
+	pal/messaging/glib/pal-glib-msg.cpp	\
+	pal/network/dbus/pal-dbus-network.cpp	\
+	pal/network/pal-linux-network.cpp	\
+endif
 
 if CODECS_SUPPORTED
 libmoon_la_SOURCES += pipeline-ui.cpp
