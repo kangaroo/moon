@@ -43,6 +43,9 @@ elif test "x$with_pal" = "xgtk"; then
 
 elif test "x$with_pal" = "xcocoa"; then
 
+	dnl We force parsing as objective-c++ since thats what we are, but automake doesn't understand .mm
+	OBJCFLAGS="-x objective-c++ $CFLAGS"
+
 	AC_DEFINE([PAL_COCOA_WINDOWING],1,[Hack in support for the pal-cocoa so we can start using it.])
 	pal_windowing="cocoa"
 

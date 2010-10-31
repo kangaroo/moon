@@ -301,15 +301,18 @@ libmoon_la_SOURCES += \
 endif
 
 if COCOA_PAL
+libmoon_la_OBJCFLAGS = $(AM_OBJCFLAGS)
+libmoon_la_OBJCXXFLAGS = $(AM_OBJCXXFLAGS)
+
 libmoon_la_SOURCES += \
-	pal/cocoa/clipboard-cocoa.cpp	\
-	pal/cocoa/config-dialog-cocoa.cpp\
-	pal/cocoa/im-cocoa.cpp	\
-	pal/cocoa/install-dialog-cocoa.cpp\
-	pal/cocoa/pal-cocoa.cpp	\
-	pal/cocoa/pixbuf-cocoa.cpp	\
-	pal/cocoa/window-cocoa.cpp	\
-	pal/cocoa/debug-ui-cocoa.cpp
+	pal/cocoa/clipboard-cocoa.m	\
+	pal/cocoa/config-dialog-cocoa.m\
+	pal/cocoa/im-cocoa.m	\
+	pal/cocoa/install-dialog-cocoa.m\
+	pal/cocoa/pal-cocoa.m	\
+	pal/cocoa/pixbuf-cocoa.m	\
+	pal/cocoa/window-cocoa.m	\
+	pal/cocoa/debug-ui-cocoa.m
 endif
 
 
