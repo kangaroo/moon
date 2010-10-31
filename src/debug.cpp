@@ -10,7 +10,7 @@
 
 #include <config.h>
 
-#if DEBUG
+#if DEBUG && !defined(__APPLE__) && !defined(__OS_THAT_DOESNT_HATE_POSIX__)
 #define INCLUDED_MONO_HEADERS 1
 
 #include <glib.h>
@@ -905,4 +905,4 @@ moonlight_install_signal_handlers ()
 }
 #endif /* SANITY */
 
-#endif /* DEBUG */
+#endif /* DEBUG && !defined(__APPLE__) && !defined(__OS_THAT_DOESNT_HATE_POSIX__) */

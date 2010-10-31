@@ -1,0 +1,11 @@
+The moon build on darwin currently doesn't work at all, and doesn't have my PAL
+commited.  To get to where I am sans pal you need macports with autotools
+and cairo/pixman from source built as:
+
+sudo /opt/local/bin/port install cairo +quartz
+
+You can then make a moon/mono/mono-basic parallel checkout and run with:
+
+PATH=/opt/local/bin/:$PATH ./autogen.sh --prefix=/opt/darwoon --with-pal=cocoa --with-curl=no --host=i386-apple-darwin10 --with-cairo=system CFLAGS="-arch i386" CXXFLAGS="-arch i386" LDFLAGS="-arch i386"
+
+Which should at least let this source tree configure and get hacking started.
