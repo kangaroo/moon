@@ -20,6 +20,106 @@
 
 using namespace Moonlight;
 
+class MoonCrossingEventEnteredCocoa : public MoonCrossingEvent {
+public:
+        MoonCrossingEventEnteredCocoa (NSEvent *event)
+        {
+		this->event = [event retain];
+        }
+
+        virtual ~MoonCrossingEventEnteredCocoa ()
+        {
+		[event release];
+        }
+
+        virtual MoonEvent* Clone ()
+        {
+                return new MoonCrossingEventEnteredCocoa (event);
+        }
+
+        virtual gpointer GetPlatformEvent ()
+        {
+                return event;
+        }
+
+        virtual Moonlight::Point GetPosition ()
+        {
+		return Moonlight::Point (loc.x, loc.y);
+        }
+
+        virtual double GetPressure ()
+        {
+                return 0.0;
+        }
+
+        virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
+        {
+        }
+
+        virtual MoonModifier GetModifiers ()
+        {
+                g_assert_not_reached ();
+        }
+
+        virtual bool IsEnter ()
+        {
+		return FALSE;
+        }
+
+private:
+        NSEvent *event;
+};
+
+class MoonCrossingEventExitedCocoa : public MoonCrossingEvent {
+public:
+        MoonCrossingEventExitedCocoa (NSEvent *event)
+        {
+                this->event = [event retain];
+        }
+
+        virtual ~MoonCrossingEventExitedCocoa ()
+        {
+		[event release];
+        }
+
+        virtual MoonEvent* Clone ()
+        {
+                return new MoonCrossingEventExitedCocoa (event);
+        }
+
+        virtual gpointer GetPlatformEvent ()
+        {
+                return event;
+        }
+
+        virtual Moonlight::Point GetPosition ()
+        {
+                return Moonlight::Point (loc.x, loc.y);
+        }
+
+        virtual double GetPressure ()
+        {
+                return 0.0;
+        }
+
+        virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
+        {
+        }
+
+        virtual MoonModifier GetModifiers ()
+        {
+                g_assert_not_reached ();
+        }
+
+        virtual bool IsEnter ()
+        {
+		return false;
+        }
+
+private:
+        NSEvent *event;
+};
+
 class MoonButtonEventCocoa : public MoonButtonEvent {
 public:
         MoonButtonEventCocoa (NSEvent *event)
@@ -267,10 +367,9 @@ MoonWindowingSystemCocoa::CreateEventFromPlatformEvent (gpointer platformEvent)
 
 	switch ([evt type]) {
 		case NSMouseEntered:
-			printf ("Mouse entered\n");
-			break;
+			return new MoonMouseEnteredEvent (evt);
 		case NSMouseExited:
-			printf ("Mouse exited\n");
+			return new MoonMouseExitedEvent (evt);
 			break;
 		case NSMouseMoved:
 			return new MoonMotionEventCocoa (evt);

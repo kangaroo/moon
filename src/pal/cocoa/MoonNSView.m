@@ -25,6 +25,16 @@
 	moonwindow->MotionEvent (event);
 }
 
+- (void)mouseEntered:(NSEvent *)event
+{
+	moonwindow->MouseEnteredEvent (event);
+}
+
+- (void)mouseExited:(NSEvent *)event
+{
+	moonwindow->MouseExitedEvent (event);
+}
+
 - (BOOL)acceptsFirstMouse:(NSEvent *)event
 {
 	return YES;

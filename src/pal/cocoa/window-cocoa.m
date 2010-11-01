@@ -1,4 +1,5 @@
 /* -*- Mode: C++; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+tio
 /*
  * window-cocoa.cpp: MoonWindow implementation using cocoa widgets.
  *
@@ -48,6 +49,9 @@ MoonWindowCocoa::MoonWindowCocoa (MoonWindowType windowType, int w, int h, MoonW
 	window.acceptsMouseMovedEvents = YES;
 	window.contentView = view;
 	view.moonwindow = this;
+
+	// FIXME: TrackingRect needs to update on resize
+	[view addTrackingRect:[view frame] owner:view userData:nil assumeInside:NO];
 
 	this->width = w;
 	this->height = h;
@@ -286,6 +290,32 @@ MoonWindowCocoa::MotionEvent (void *evt)
 	if (surface) {
 		MoonMotionEvent *mevent = (MoonMotionEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
 		surface->HandleUIMotion (mevent);
+		delete mevent;
+	}
+}
+
+void
+MoonWindowCocoa::MouseEnteredEvent (void *evt)
+{
+	NSEvent *event = (NSEvent *) evt;
+	SetCurrentDeployment ();
+
+	if (surface) {
+		MoonCrossingEvent *mevent = (MoonCrossingEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
+		window->surface->HandleUICrossing (mevent);
+		delete mevent;
+	}
+}
+
+void
+MoonWindowCocoa::MouseExitedEvent (void *evt)
+{
+	NSEvent *event = (NSEvent *) evt;
+	SetCurrentDeployment ();
+
+	if (surface) {
+		MoonCrossingEvent *mevent = (MoonCrossingEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
+		window->surface->HandleUICrossing (mevent);
 		delete mevent;
 	}
 }

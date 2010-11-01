@@ -69,6 +69,8 @@ public:
 
 	/* These bleed across the public API :( */
 	void ExposeEvent (Rect r);
+	void MouseEnteredEvent (gpointer evt);
+	void MouseExitedEvent (gpointer evt);
 	void MotionEvent (gpointer evt);
 	void ButtonPressEvent (gpointer evt);
 	void ButtonReleaseEvent (gpointer evt);
