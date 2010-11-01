@@ -237,7 +237,14 @@ MoonWindowCocoa::SetStyle (WindowStyle style)
 cairo_surface_t *
 MoonWindowCocoa::CreateCairoSurface ()
 {
-	return cairo_quartz_surface_create_for_cg_context ((CGContextRef) [[NSGraphicsContext currentContext] graphicsPort], ((MoonNSView *) view).frame.size.width, ((MoonNSView *) view).frame.size.height);
+	CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
+	int width = ((MoonNSView *) view).frame.size.width;
+	int height = ((MoonNSView *) view).frame.size.height;
+
+	CGContextTranslateCTM (context, 0.0, height);
+	CGContextScaleCTM (context, 1.0, -1.0);
+
+	return cairo_quartz_surface_create_for_cg_context (context, width, height);
 }
 
 void
