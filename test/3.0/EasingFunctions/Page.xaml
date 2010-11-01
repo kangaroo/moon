@@ -40,10 +40,6 @@
 	<QuinticEase x:Key="quinticEaseInOut" EasingMode="EaseInOut"/>
 	<SineEase x:Key="sineEaseInOut" EasingMode="EaseInOut"/>
 
-	<ease:CustomEaseIn x:Key="customEaseIn" />
-	<ease:CustomEaseOut x:Key="customEaseOut" />
-	<ease:CustomEaseInOut x:Key="customEaseInOut" />
-
 	<Style x:Key="headingText" TargetType="TextBlock">
 	       <Setter Property="FontWeight" Value="Bold" />
 	       <Setter Property="FontSize" Value="11" />
@@ -135,7 +131,6 @@
 		<TextBlock Style="{StaticResource headingText}" Text="Sine" />
 	</Border>
 
-	<ease:EasingView Grid.Column="1" Grid.Row="1" EasingFunction="{StaticResource customEaseIn}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="1" Grid.Row="2" EasingFunction="{StaticResource backEaseIn}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="1" Grid.Row="3" EasingFunction="{StaticResource bounceEaseIn}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="1" Grid.Row="4" EasingFunction="{StaticResource circleEaseIn}" MouseLeftButtonDown="StartAnimation" />
@@ -148,7 +143,6 @@
 	<ease:EasingView Grid.Column="1" Grid.Row="11" EasingFunction="{StaticResource quinticEaseIn}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="1" Grid.Row="12" EasingFunction="{StaticResource sineEaseIn}" MouseLeftButtonDown="StartAnimation" />
 
-	<ease:EasingView Grid.Column="2" Grid.Row="1" EasingFunction="{StaticResource customEaseOut}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="2" Grid.Row="2" EasingFunction="{StaticResource backEaseOut}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="2" Grid.Row="3" EasingFunction="{StaticResource bounceEaseOut}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="2" Grid.Row="4" EasingFunction="{StaticResource circleEaseOut}" MouseLeftButtonDown="StartAnimation" />
@@ -161,7 +155,6 @@
 	<ease:EasingView Grid.Column="2" Grid.Row="11" EasingFunction="{StaticResource quinticEaseOut}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="2" Grid.Row="12" EasingFunction="{StaticResource sineEaseOut}" MouseLeftButtonDown="StartAnimation" />
 
-	<ease:EasingView Grid.Column="3" Grid.Row="1" EasingFunction="{StaticResource customEaseInOut}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="3" Grid.Row="2" EasingFunction="{StaticResource backEaseInOut}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="3" Grid.Row="3" EasingFunction="{StaticResource bounceEaseInOut}" MouseLeftButtonDown="StartAnimation" />
 	<ease:EasingView Grid.Column="3" Grid.Row="4" EasingFunction="{StaticResource circleEaseInOut}" MouseLeftButtonDown="StartAnimation" />
