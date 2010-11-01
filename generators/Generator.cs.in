@@ -3178,6 +3178,7 @@ class Generator {
 		files.Remove (Path.Combine (srcdir, "ptr.h"));
 		files.Remove (Path.Combine (plugindir, "plugin-domevents.h"));
 		files.Remove (Path.Combine (pal@PAL@dir, "MoonNSView.h"));
+		files.Remove (Path.Combine (pal@PAL@dir, "MoonCocoaTimer.h"));
 	}
 
 }
