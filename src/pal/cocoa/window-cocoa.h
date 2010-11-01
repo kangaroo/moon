@@ -69,6 +69,7 @@ public:
 
 	/* These bleed across the public API :( */
 	void ExposeEvent (Rect r);
+	void MotionEvent (gpointer evt);
 
 private:
 	unsigned char *backing_image_data;

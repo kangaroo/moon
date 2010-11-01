@@ -151,7 +151,22 @@ MoonWindowingSystemCocoa::CreateIMContext ()
 MoonEvent*
 MoonWindowingSystemCocoa::CreateEventFromPlatformEvent (gpointer platformEvent)
 {
-	g_assert_not_reached ();
+	NSEvent *evt = (NSEvent *) platformEvent;
+
+	switch ([evt type]) {
+		case NSMouseEntered:
+			printf ("Mouse entered\n");
+			break;
+		case NSMouseExited:
+			printf ("Mouse exited\n");
+			break;
+		case NSMouseMoved:
+			return new MoonMotionEventCocoa (platformEvent);
+		default:
+			g_assert_not_reached ();
+	}
+
+	return NULL;
 }
 
 guint
@@ -201,6 +216,57 @@ MoonInstallerServiceCocoa::Install (Deployment *deployment, bool unattended)
 
 bool
 MoonInstallerServiceCocoa::Uninstall (Deployment *deployment)
+{
+	g_assert_not_reached ();
+}
+
+MoonMotionEventCocoa::MoonMotionEventCocoa (void *event)
+{
+	this->event = [event retain];
+}
+
+MoonMotionEventCocoa::~MoonMotionEventCocoa ()
+{
+	[event release];
+}
+
+MoonEvent *
+MoonMotionEventCocoa::Clone ()
+{
+	return new MoonMotionEventCocoa (this->event);
+}
+
+gpointer
+MoonMotionEventCocoa::GetPlatformEvent ()
+{
+	return event;
+}
+
+Moonlight::Point
+MoonMotionEventCocoa::GetPosition ()
+{
+	// FIXME: This assumes 1 view per window, once we support embedding this is wrong
+	// We need to do a:
+	//   NSPoint local_point = [self convertPoint:event_location fromView:nil];
+	// But this blurs the event/window divide, whats best here?
+	NSPoint loc = [event locationInWindow];
+	return Moonlight::Point (loc.x, loc.y);
+}
+
+double
+MoonMotionEventCocoa::GetPressure ()
+{
+	return [event pressure];
+}
+
+void
+MoonMotionEventCocoa::GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
+{
+	g_assert_not_reached ();
+}
+
+MoonModifier
+MoonMotionEventCocoa::GetModifiers ()
 {
 	g_assert_not_reached ();
 }

@@ -45,6 +45,7 @@ MoonWindowCocoa::MoonWindowCocoa (MoonWindowType windowType, int w, int h, MoonW
 	NSWindow *window = [[NSWindow alloc] initWithContentRect: NSMakeRect (0, 0, w, h) styleMask: NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask backing: NSBackingStoreBuffered defer: YES];
 	MoonNSView *view = [[[MoonNSView alloc] initWithFrame: NSMakeRect (0, 0, w, h)] autorelease];
 
+	window.acceptsMouseMovedEvents = YES;
 	window.contentView = view;
 	view.moonwindow = this;
 
@@ -248,6 +249,19 @@ MoonWindowCocoa::CreateCairoSurface ()
 	CGContextScaleCTM (context, 1.0, -1.0);
 
 	return cairo_quartz_surface_create_for_cg_context (context, width, height);
+}
+
+void
+MoonWindowCocoa::MotionEvent (void *evt)
+{
+	NSEvent *event = (NSEvent *) evt;
+	SetCurrentDeployment ();
+
+	if (surface) {
+		MoonMotionEvent *mevent = (MoonMotionEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
+		surface->HandleUIMotion (mevent);
+		delete mevent;
+	}
 }
 
 void
