@@ -102,7 +102,9 @@ MoonWindowCocoa::SetCursor (CursorType cursor)
 void
 MoonWindowCocoa::Invalidate (Rect r)
 {
-	[view setNeedsDisplayInRect: NSMakeRect (r.x, r.y, r.width, r.height)];
+	// Invalidations are currently inverted, wtf?
+	[view setNeedsDisplayInRect: [view frame]];
+//	[view setNeedsDisplayInRect: NSMakeRect (r.x, r.y, r.width, r.height)];
 }
 
 void
@@ -253,14 +255,15 @@ MoonWindowCocoa::ExposeEvent (Rect r)
 {
 	SetCurrentDeployment ();
 	Region *region = new Region (r);
-
-	native = CreateCairoSurface ();
+	cairo_surface_t *native = CreateCairoSurface ();
 	CairoSurface *target = new CairoSurface (native);
-
-	ctx = new CairoContext (target);
-	target->unref ();
+	CairoContext *ctx = new CairoContext (target);
 
 	surface->Paint (ctx, region, GetTransparent (), NO);
 
+	cairo_surface_destroy (native);
+
+	target->unref ();
+	delete ctx;
 	delete region;
 }
