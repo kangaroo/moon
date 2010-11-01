@@ -33,10 +33,7 @@
 
 #define PLUGIN_OURNAME      "Novell Moonlight"
 
-// change this to "1" if you want fullscreen redraws to allocate a new
-// pixmap per redraw just at the size of the expose area.
-//
-#define FULLSCREEN_BACKING_STORE_SOPTIMIZATION 0
+// FIXME: We have a lot of horrible hacks here since we dont subclass NSWindow yet and proxy its events
 
 using namespace Moonlight;
 
