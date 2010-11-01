@@ -1,5 +1,4 @@
 /* -*- Mode: C++; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
-tio
 /*
  * window-cocoa.cpp: MoonWindow implementation using cocoa widgets.
  *
@@ -50,8 +49,7 @@ MoonWindowCocoa::MoonWindowCocoa (MoonWindowType windowType, int w, int h, MoonW
 	window.contentView = view;
 	view.moonwindow = this;
 
-	// FIXME: TrackingRect needs to update on resize
-	[view addTrackingRect:[view frame] owner:view userData:nil assumeInside:NO];
+	[view setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
 
 	this->width = w;
 	this->height = h;
@@ -107,9 +105,10 @@ MoonWindowCocoa::SetCursor (CursorType cursor)
 void
 MoonWindowCocoa::Invalidate (Rect r)
 {
-	// Invalidations are currently inverted, wtf?
+//	NSRect frame = [view frame];
+
+//	[view setNeedsDisplayInRect: NSMakeRect (r.x, frame.size.height - r.y - r.height, r.width, r.height)];
 	[view setNeedsDisplayInRect: [view frame]];
-//	[view setNeedsDisplayInRect: NSMakeRect (r.x, r.y, r.width, r.height)];
 }
 
 void
@@ -302,7 +301,7 @@ MoonWindowCocoa::MouseEnteredEvent (void *evt)
 
 	if (surface) {
 		MoonCrossingEvent *mevent = (MoonCrossingEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
-		window->surface->HandleUICrossing (mevent);
+		surface->HandleUICrossing (mevent);
 		delete mevent;
 	}
 }
@@ -315,7 +314,7 @@ MoonWindowCocoa::MouseExitedEvent (void *evt)
 
 	if (surface) {
 		MoonCrossingEvent *mevent = (MoonCrossingEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
-		window->surface->HandleUICrossing (mevent);
+		surface->HandleUICrossing (mevent);
 		delete mevent;
 	}
 }

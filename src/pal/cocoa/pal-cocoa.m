@@ -44,6 +44,7 @@ public:
 
         virtual Moonlight::Point GetPosition ()
         {
+		NSPoint loc = [event locationInWindow];
 		return Moonlight::Point (loc.x, loc.y);
         }
 
@@ -94,6 +95,7 @@ public:
 
         virtual Moonlight::Point GetPosition ()
         {
+		NSPoint loc = [event locationInWindow];
                 return Moonlight::Point (loc.x, loc.y);
         }
 
@@ -367,9 +369,9 @@ MoonWindowingSystemCocoa::CreateEventFromPlatformEvent (gpointer platformEvent)
 
 	switch ([evt type]) {
 		case NSMouseEntered:
-			return new MoonMouseEnteredEvent (evt);
+			return new MoonCrossingEventEnteredCocoa (evt);
 		case NSMouseExited:
-			return new MoonMouseExitedEvent (evt);
+			return new MoonCrossingEventExitedCocoa (evt);
 			break;
 		case NSMouseMoved:
 			return new MoonMotionEventCocoa (evt);

@@ -3,6 +3,7 @@
 
 @interface MoonNSView : NSView {
 	Moonlight::MoonWindowCocoa *moonwindow;
+	NSTrackingRectTag trackingrect;
 }
 
 @property Moonlight::MoonWindowCocoa *moonwindow;
