@@ -1,0 +1,205 @@
+/* -*- Mode: C++; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+
+#include <config.h>
+#include "pal-cocoa.h"
+
+#include "runtime.h"
+#include "window-cocoa.h"
+#include "pixbuf-cocoa.h"
+#include "im-cocoa.h"
+#include "debug.h"
+
+#include <glib.h>
+#include <glib/gstdio.h>
+
+#include <cairo.h>
+
+#include "MoonCocoaTimer.h"
+
+#include <AppKit/AppKit.h>
+
+using namespace Moonlight;
+
+/// our windowing system
+
+MoonWindowingSystemCocoa::MoonWindowingSystemCocoa (bool out_of_browser)
+{
+	ProcessSerialNumber psn = { 0, kCurrentProcess };
+	pool = [[NSAutoreleasePool alloc] init];
+
+	TransformProcessType (&psn, kProcessTransformToForegroundApplication);
+
+	[[NSApplication sharedApplication] finishLaunching];
+}
+
+MoonWindowingSystemCocoa::~MoonWindowingSystemCocoa ()
+{
+	[((NSAutoreleasePool *)pool) release];
+}
+
+
+cairo_surface_t *
+MoonWindowingSystemCocoa::CreateSurface ()
+{
+	// FIXME...
+	g_assert_not_reached ();
+}
+
+MoonWindow *
+MoonWindowingSystemCocoa::CreateWindow (MoonWindowType windowType, int width, int height, MoonWindow *parentWindow, Surface *surface)
+{
+	MoonWindowCocoa *cocoawindow = new MoonWindowCocoa (windowType, width, height, parentWindow, surface);
+	return cocoawindow;
+}
+
+MoonWindow *
+MoonWindowingSystemCocoa::CreateWindowless (int width, int height, PluginInstance *forPlugin)
+{
+	MoonWindowCocoa *cocoawindow = (MoonWindowCocoa*)MoonWindowingSystem::CreateWindowless (width, height, forPlugin);
+	return cocoawindow;
+}
+
+MoonMessageBoxResult
+MoonWindowingSystemCocoa::ShowMessageBox (MoonMessageBoxType message_type, const char *caption, const char *text, MoonMessageBoxButton button)
+{
+	g_assert_not_reached ();
+}
+
+char**
+MoonWindowingSystemCocoa::ShowOpenFileDialog (const char *title, bool multsel, const char *filter, int idx)
+{
+	g_assert_not_reached ();
+}
+
+char*
+MoonWindowingSystemCocoa::ShowSaveFileDialog (const char *title, const char *filter, int idx)
+{
+	g_assert_not_reached ();
+}
+
+
+bool
+MoonWindowingSystemCocoa::ShowConsentDialog (const char *question, const char *detail, const char *website, bool *remember)
+{
+	g_assert_not_reached ();
+}
+
+Color *
+MoonWindowingSystemCocoa::GetSystemColor (SystemColor id)
+{
+	g_assert_not_reached ();
+}
+
+guint
+MoonWindowingSystemCocoa::AddTimeout (gint priority, gint ms, MoonSourceFunc timeout, gpointer data)
+{
+	MoonCocoaTimer *mtimer = [[MoonCocoaTimer alloc] init];
+	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval: (ms/1000.0) target: mtimer selector: SEL("onTick:") userInfo: mtimer repeats: YES];
+
+	mtimer.timeout = timeout;
+	mtimer.userInfo = data;
+
+	[[NSRunLoop mainRunLoop] addTimer: timer forMode: NSRunLoopCommonModes];
+
+	[timer autorelease];
+	// FIXME: 64-bit evil
+	return (guint) timer;
+}
+
+void
+MoonWindowingSystemCocoa::RemoveTimeout (guint timeoutId)
+{
+	// FIXME: 64-bit evil
+	NSTimer *timer = (NSTimer *) timeoutId;
+
+	[timer invalidate];
+	[[timer userInfo] autorelease];
+}
+
+guint
+MoonWindowingSystemCocoa::AddIdle (MoonSourceFunc idle, gpointer data)
+{
+	MoonCocoaTimer *mtimer = [[MoonCocoaTimer alloc] init];
+	NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval: (500/1000.0) target: mtimer selector: SEL("onTick:") userInfo: mtimer repeats: YES];
+
+	mtimer.timeout = idle;
+	mtimer.userInfo = data;
+
+	[[NSRunLoop mainRunLoop] addTimer: timer forMode: NSRunLoopCommonModes];
+
+	// FIXME: 64-bit evil
+	return (guint) timer;
+}
+
+void
+MoonWindowingSystemCocoa::RemoveIdle (guint idle_id)
+{
+	// FIXME: 64-bit evil
+	NSTimer *timer = (NSTimer *) idle_id;
+
+	[timer invalidate];
+	[[timer userInfo] autorelease];
+}
+
+MoonIMContext*
+MoonWindowingSystemCocoa::CreateIMContext ()
+{
+	g_assert_not_reached ();
+}
+
+MoonEvent*
+MoonWindowingSystemCocoa::CreateEventFromPlatformEvent (gpointer platformEvent)
+{
+	g_assert_not_reached ();
+}
+
+guint
+MoonWindowingSystemCocoa::GetCursorBlinkTimeout (MoonWindow *moon_window)
+{
+	g_assert_not_reached ();
+}
+
+
+MoonPixbufLoader*
+MoonWindowingSystemCocoa::CreatePixbufLoader (const char *imageType)
+{
+	g_assert_not_reached ();
+}
+
+void
+MoonWindowingSystemCocoa::RunMainLoop (MoonWindow *window, bool quit_on_window_close)
+{
+	if (window) {
+		window->Show ();
+	}
+
+	[NSApp run];
+}
+
+
+MoonInstallerServiceCocoa::MoonInstallerServiceCocoa ()
+{
+	base_install_dir = g_build_filename (g_get_home_dir (), ".local", "share", "moonlight", "applications", NULL);
+}
+
+MoonInstallerServiceCocoa::~MoonInstallerServiceCocoa ()
+{
+}
+
+const char *
+MoonInstallerServiceCocoa::GetBaseInstallDir ()
+{
+	return base_install_dir;
+}
+
+bool
+MoonInstallerServiceCocoa::Install (Deployment *deployment, bool unattended)
+{
+	g_assert_not_reached ();
+}
+
+bool
+MoonInstallerServiceCocoa::Uninstall (Deployment *deployment)
+{
+	g_assert_not_reached ();
+}
