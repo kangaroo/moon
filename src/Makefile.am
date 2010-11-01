@@ -305,6 +305,7 @@ libmoon_la_OBJCFLAGS = $(AM_OBJCFLAGS)
 libmoon_la_OBJCXXFLAGS = $(AM_OBJCXXFLAGS)
 
 libmoon_la_SOURCES += \
+	pal/cocoa/MoonNSView.m		\
 	pal/cocoa/clipboard-cocoa.m	\
 	pal/cocoa/config-dialog-cocoa.m\
 	pal/cocoa/im-cocoa.m	\

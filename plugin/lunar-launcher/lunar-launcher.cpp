@@ -180,18 +180,20 @@ load_app (Deployment *deployment, const char *base_dir, MoonAppRecord *app)
 	 * can do proper web download checks */
 	surface = deployment->GetSurface ();
 
-	origin = Uri::Create (app->origin);
+	origin = Uri::Create ("http://localhost/");
+//	origin = Uri::Create (app->origin);
 	surface->SetSourceLocation (origin);
 	delete origin;
 	
 	/* get the install path/uri for the Xap */
-	path = g_build_filename (base_dir, app->uid, "Application.xap", NULL);
+//	path = g_build_filename (base_dir, app->uid, "Application.xap", NULL);
+	path = "/tmp/Application.xap";
 	uri = g_strdup_printf ("file://%s", path);
 	url = Uri::Create (uri);
 	
 	deployment->SetXapFilename (path);
 	deployment->SetXapLocation (url);
-	g_free (path);
+//	g_free (path);
 	g_free (uri);
 	delete url;
 	
@@ -211,7 +213,7 @@ create_window (Deployment *deployment, const char *app_id)
 	/* fetch the app record */
 	if (!(app = installer->GetAppRecord (app_id))) {
 		g_warning ("Could not find application: %s", app_id);
-		return NULL;
+//		return NULL;
 	}
 
 	/* create the moonlight widget */
@@ -268,6 +270,9 @@ create_window (Deployment *deployment, const char *app_id)
 	} else if (oob != NULL) {
 		moon_window->SetTitle (oob->GetShortName ());
 	} else {
+		moon_window->Resize (500, 500);
+		moon_window->SetLeft (20);
+		moon_window->SetTop (20);
 		moon_window->SetTitle ("Moonlight");
 	}
 	
@@ -360,6 +365,8 @@ int main (int argc, char **argv)
 	
 	if (!(window = create_window (deployment, argv[1])))
 		return EXIT_FAILURE;
+
+	window->Show ();
 
 	winsys->RunMainLoop (window);
 
