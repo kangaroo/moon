@@ -138,27 +138,25 @@ MoonWindowCocoa::Hide ()
 void
 MoonWindowCocoa::EnableEvents (bool first)
 {
-	// FIXME: What do we do here on cocoa
-	// Current thought is guard te dispatch of all events from the java side with a bool?
+	g_warning ("implement me");
 }
 
 void
 MoonWindowCocoa::DisableEvents ()
 {
-	// FIXME: What do we do here on cocoa
-	// Current thought is guard te dispatch of all events from the java side with a bool?
+	g_warning ("implement me");
 }
 
 void
 MoonWindowCocoa::GrabFocus ()
 {
-	g_assert_not_reached ();
+	g_warning ("implement me");
 }
 
 bool
 MoonWindowCocoa::HasFocus ()
 {
-	g_assert_not_reached ();
+	g_warning ("implement me");
 }
 
 void
@@ -249,6 +247,34 @@ MoonWindowCocoa::CreateCairoSurface ()
 	CGContextScaleCTM (context, 1.0, -1.0);
 
 	return cairo_quartz_surface_create_for_cg_context (context, width, height);
+}
+
+/* FIXME: ButtonPress nad ButtonRelease need button numbers swizzled here for guarding and in the event dispatch */
+void
+MoonWindowCocoa::ButtonPressEvent (void *evt)
+{
+	NSEvent *event = (NSEvent *) evt;
+	SetCurrentDeployment ();
+
+	if (surface) {
+		MoonButtonEvent *mevent = (MoonButtonEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
+		surface->HandleUIButtonPress (mevent);
+		delete mevent;
+	}
+}
+
+/* FIXME: ButtonPress nad ButtonRelease need button numbers swizzled here for guarding and in the event dispatch */
+void
+MoonWindowCocoa::ButtonReleaseEvent (void *evt)
+{
+	NSEvent *event = (NSEvent *) evt;
+	SetCurrentDeployment ();
+
+	if (surface) {
+		MoonButtonEvent *mevent = (MoonButtonEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
+		surface->HandleUIButtonRelease (mevent);
+		delete mevent;
+	}
 }
 
 void

@@ -64,21 +64,5 @@ public:
 	virtual bool Uninstall (Deployment *deployment);
 };
 
-class MoonMotionEventCocoa : public MoonMotionEvent {
-public:
-        MoonMotionEventCocoa (void *event);
-        virtual ~MoonMotionEventCocoa ();
-        virtual MoonEvent* Clone ();
-        virtual gpointer GetPlatformEvent ();
-        virtual Moonlight::Point GetPosition ();
-        virtual double GetPressure ();
-        virtual MoonModifier GetModifiers ();
-        virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted);
-
-private:
-        void *event;
-};
-
-
 };
 #endif /* MOON_PAL_COCOA_H */

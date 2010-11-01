@@ -20,6 +20,118 @@
 
 using namespace Moonlight;
 
+class MoonButtonEventCocoa : public MoonButtonEvent {
+public:
+        MoonButtonEventCocoa (NSEvent *event)
+        {
+		this->event = [event retain];
+        }
+
+        virtual ~MoonButtonEventCocoa ()
+        {
+		[event release];
+        }
+
+        virtual MoonEvent* Clone ()
+        {
+                return new MoonButtonEventCocoa (event);
+        }
+
+        virtual gpointer GetPlatformEvent ()
+        {
+                return event;
+        }
+
+        virtual Moonlight::Point GetPosition ()
+        {
+		NSPoint loc = [event locationInWindow];
+                return Moonlight::Point (loc.x, loc.y);
+        }
+
+        virtual double GetPressure ()
+        {
+		return [event pressure];
+        }
+
+        virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
+        {
+		g_assert_not_reached ();
+        }
+
+        virtual MoonModifier GetModifiers ()
+        {
+		g_assert_not_reached ();
+        }
+
+        bool IsRelease ()
+        {
+		if ([event type] == NSLeftMouseUp || [event type] == NSRightMouseUp || [event type] == NSOtherMouseUp)
+			return YES;
+
+		return NO;
+        }
+
+        int GetButton ()
+        {
+		return [event buttonNumber];
+        }
+
+        virtual int GetNumberOfClicks ()
+        {
+		return [event clickCount];
+        }
+
+private:
+        NSEvent *event;
+};
+
+class MoonMotionEventCocoa : public MoonMotionEvent {
+public:
+        MoonMotionEventCocoa (NSEvent *event)
+        {
+		this->event = [event retain];
+        }
+
+        virtual ~MoonMotionEventCocoa ()
+        {
+		[event release];
+        }
+
+        virtual MoonEvent* Clone ()
+        {
+                return new MoonMotionEventCocoa (event);
+        }
+
+        virtual gpointer GetPlatformEvent ()
+        {
+                return event;
+        }
+
+        virtual Moonlight::Point GetPosition ()
+        {
+		NSPoint loc = [event locationInWindow];
+                return Moonlight::Point (loc.x, loc.y);
+        }
+
+        virtual double GetPressure ()
+        {
+		return [event pressure];
+        }
+
+        virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
+        {
+		g_assert_not_reached ();
+        }
+
+        virtual MoonModifier GetModifiers ()
+        {
+		g_assert_not_reached ();
+        }
+
+private:
+        NSEvent *event;
+};
+
 /// our windowing system
 
 MoonWindowingSystemCocoa::MoonWindowingSystemCocoa (bool out_of_browser)
@@ -161,7 +273,14 @@ MoonWindowingSystemCocoa::CreateEventFromPlatformEvent (gpointer platformEvent)
 			printf ("Mouse exited\n");
 			break;
 		case NSMouseMoved:
-			return new MoonMotionEventCocoa (platformEvent);
+			return new MoonMotionEventCocoa (evt);
+		case NSLeftMouseUp:
+		case NSRightMouseUp:
+		case NSOtherMouseUp:
+		case NSLeftMouseDown:
+		case NSRightMouseDown:
+		case NSOtherMouseDown:
+			return new MoonButtonEventCocoa (evt);
 		default:
 			g_assert_not_reached ();
 	}
@@ -216,57 +335,6 @@ MoonInstallerServiceCocoa::Install (Deployment *deployment, bool unattended)
 
 bool
 MoonInstallerServiceCocoa::Uninstall (Deployment *deployment)
-{
-	g_assert_not_reached ();
-}
-
-MoonMotionEventCocoa::MoonMotionEventCocoa (void *event)
-{
-	this->event = [event retain];
-}
-
-MoonMotionEventCocoa::~MoonMotionEventCocoa ()
-{
-	[event release];
-}
-
-MoonEvent *
-MoonMotionEventCocoa::Clone ()
-{
-	return new MoonMotionEventCocoa (this->event);
-}
-
-gpointer
-MoonMotionEventCocoa::GetPlatformEvent ()
-{
-	return event;
-}
-
-Moonlight::Point
-MoonMotionEventCocoa::GetPosition ()
-{
-	// FIXME: This assumes 1 view per window, once we support embedding this is wrong
-	// We need to do a:
-	//   NSPoint local_point = [self convertPoint:event_location fromView:nil];
-	// But this blurs the event/window divide, whats best here?
-	NSPoint loc = [event locationInWindow];
-	return Moonlight::Point (loc.x, loc.y);
-}
-
-double
-MoonMotionEventCocoa::GetPressure ()
-{
-	return [event pressure];
-}
-
-void
-MoonMotionEventCocoa::GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
-{
-	g_assert_not_reached ();
-}
-
-MoonModifier
-MoonMotionEventCocoa::GetModifiers ()
 {
 	g_assert_not_reached ();
 }

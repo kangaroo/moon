@@ -12,7 +12,12 @@
 
 - (void)mouseDown:(NSEvent*)event
 {
-	NSLog (@"Mouse Down");
+	moonwindow->ButtonPressEvent (event);
+}
+
+- (void)mouseUp:(NSEvent*)event
+{
+	moonwindow->ButtonReleaseEvent (event);
 }
 
 - (void)mouseMoved:(NSEvent *)event

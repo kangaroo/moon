@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C++; tab-width: 8; indent-tabs-: t; c-basic-offset: 8 -*- */
 /*
  * window-cocoa.h: MoonWindow implementation using cocoa widgets.
  *
@@ -70,6 +70,8 @@ public:
 	/* These bleed across the public API :( */
 	void ExposeEvent (Rect r);
 	void MotionEvent (gpointer evt);
+	void ButtonPressEvent (gpointer evt);
+	void ButtonReleaseEvent (gpointer evt);
 
 private:
 	unsigned char *backing_image_data;
