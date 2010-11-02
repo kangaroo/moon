@@ -253,7 +253,6 @@ MoonWindowCocoa::CreateCairoSurface ()
 	return cairo_quartz_surface_create_for_cg_context (context, width, height);
 }
 
-/* FIXME: ButtonPress nad ButtonRelease need button numbers swizzled here for guarding and in the event dispatch */
 void
 MoonWindowCocoa::ButtonPressEvent (void *evt)
 {
@@ -265,10 +264,9 @@ MoonWindowCocoa::ButtonPressEvent (void *evt)
 		surface->HandleUIButtonPress (mevent);
 		delete mevent;
 	}
-	[event release];
+//	[event release];
 }
 
-/* FIXME: ButtonPress nad ButtonRelease need button numbers swizzled here for guarding and in the event dispatch */
 void
 MoonWindowCocoa::ButtonReleaseEvent (void *evt)
 {
@@ -280,7 +278,7 @@ MoonWindowCocoa::ButtonReleaseEvent (void *evt)
 		surface->HandleUIButtonRelease (mevent);
 		delete mevent;
 	}
-	[event release];
+//	[event release];
 }
 
 void
@@ -294,7 +292,7 @@ MoonWindowCocoa::MotionEvent (void *evt)
 		surface->HandleUIMotion (mevent);
 		delete mevent;
 	}
-	[event release];
+//	[event release];
 }
 
 void
@@ -308,7 +306,7 @@ MoonWindowCocoa::MouseEnteredEvent (void *evt)
 		surface->HandleUICrossing (mevent);
 		delete mevent;
 	}
-	[event release];
+//	[event release];
 }
 
 void
@@ -322,7 +320,7 @@ MoonWindowCocoa::MouseExitedEvent (void *evt)
 		surface->HandleUICrossing (mevent);
 		delete mevent;
 	}
-	[event release];
+//	[event release];
 }
 
 void
