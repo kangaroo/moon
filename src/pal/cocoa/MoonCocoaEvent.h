@@ -6,8 +6,8 @@
 	MoonNSView *view;
 }
 
-@property NSEvent *event;
-@property MoonNSView *view;
+@property(assign) NSEvent *event;
+@property(assign) MoonNSView *view;
 
 - (id) initWithEvent: (NSEvent *) event view: (MoonNSView *) view;
 @end

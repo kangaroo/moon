@@ -6,10 +6,10 @@
 @synthesize view;
 @synthesize event;
 
-- (id) initWithEvent: (NSEvent *) event view: (MoonNSView *) view
+- (id) initWithEvent: (NSEvent *) evt view: (MoonNSView *) v
 {
-	self.view = view;
-	self.event = event;
+	self.view = v;
+	self.event = evt;
 
 	return self;
 }
