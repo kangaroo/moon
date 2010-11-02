@@ -17,6 +17,7 @@ public:
 	virtual gint GetRowStride ();
 	virtual gint GetNumChannels ();
 	virtual guchar *GetPixels ();
+	virtual gboolean IsPremultiplied ();
 
 	virtual gpointer GetPlatformPixbuf ();
 

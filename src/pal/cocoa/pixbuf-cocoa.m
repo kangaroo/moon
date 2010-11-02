@@ -15,25 +15,28 @@ using namespace Moonlight;
 MoonPixbufLoaderCocoa::MoonPixbufLoaderCocoa (const char *imageType)
 {
 	this->image = [[NSBitmapImageRep alloc] initForIncrementalLoad];
+	this->data = [[NSMutableData alloc] initWithLength: 0];
 }
 
 MoonPixbufLoaderCocoa::MoonPixbufLoaderCocoa ()
 {
 	this->image = [[NSBitmapImageRep alloc] initForIncrementalLoad];
+	this->data = [[NSMutableData alloc] initWithLength: 0];
 }
 
 MoonPixbufLoaderCocoa::~MoonPixbufLoaderCocoa ()
 {
 	[this->image release];
+	[this->data release];
 }
 
 void
 MoonPixbufLoaderCocoa::Write (const guchar *buffer, int buflen, MoonError **error)
 {
-	NSData *data = [[NSData alloc] initWithBytes: buffer length: buflen];
-	int res = [this->image incrementalLoadFromData: data complete: NO];
+	int res;
 
-	[data release];
+	[this->data appendBytes: buffer length: buflen];
+	[this->image incrementalLoadFromData: (NSData *) data complete: NO];
 
 	if (res == NSImageRepLoadStatusUnknownType)
 		g_warning ("unknown type");
@@ -52,10 +55,9 @@ MoonPixbufLoaderCocoa::Write (const guchar *buffer, int buflen, MoonError **erro
 void
 MoonPixbufLoaderCocoa::Close (MoonError **error)
 {
-	NSData *data = [[NSData alloc] initWithBytes: nil length: 0];
-	int res = [this->image incrementalLoadFromData: data complete: YES];
+	int res;
 
-	[data release];
+	[this->image incrementalLoadFromData: (NSData *) data complete: YES];
 	
 	if (res == NSImageRepLoadStatusUnknownType)
 		g_warning ("unknown type");
@@ -116,6 +118,12 @@ guchar*
 MoonPixbufCocoa::GetPixels ()
 {
 	return ((NSBitmapImageRep *) image).bitmapData;
+}
+
+gboolean
+MoonPixbufCocoa::IsPremultiplied ()
+{
+	return YES;
 }
 
 gpointer
