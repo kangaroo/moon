@@ -35,7 +35,7 @@ public:
 	virtual MoonPixbuf *GetPixbuf ();
 
 private:
-	void *data;
+	void *image;
 };
 
 };

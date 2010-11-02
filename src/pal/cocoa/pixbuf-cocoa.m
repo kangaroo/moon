@@ -14,40 +14,73 @@ using namespace Moonlight;
 
 MoonPixbufLoaderCocoa::MoonPixbufLoaderCocoa (const char *imageType)
 {
-	this->data = [NSMutableData dataWithCapacity: getpagesize ()];
+	this->image = [[NSBitmapImageRep alloc] initForIncrementalLoad];
 }
 
 MoonPixbufLoaderCocoa::MoonPixbufLoaderCocoa ()
 {
-	this->data = [NSMutableData dataWithCapacity: getpagesize ()];
+	this->image = [[NSBitmapImageRep alloc] initForIncrementalLoad];
 }
 
 MoonPixbufLoaderCocoa::~MoonPixbufLoaderCocoa ()
 {
-	[this->data release];
+	[this->image release];
 }
 
 void
 MoonPixbufLoaderCocoa::Write (const guchar *buffer, int buflen, MoonError **error)
 {
-	[this->data appendBytes: buffer length: buflen];
+	NSData *data = [[NSData alloc] initWithBytes: buffer length: buflen];
+	int res = [this->image incrementalLoadFromData: data complete: NO];
+
+	[data release];
+
+	if (res == NSImageRepLoadStatusUnknownType)
+		g_warning ("unknown type");
+	if (res == NSImageRepLoadStatusReadingHeader)
+		g_warning ("reading header");
+	if (res == NSImageRepLoadStatusWillNeedAllData)
+		g_warning ("need all data");
+	if (res == NSImageRepLoadStatusInvalidData)
+		g_warning ("invalid data");
+	if (res == NSImageRepLoadStatusUnexpectedEOF)
+		g_warning ("unexpected eof");
+	if (res == NSImageRepLoadStatusCompleted)
+		g_warning ("completed");
 }
 
 void
 MoonPixbufLoaderCocoa::Close (MoonError **error)
 {
+	NSData *data = [[NSData alloc] initWithBytes: nil length: 0];
+	int res = [this->image incrementalLoadFromData: data complete: YES];
+
+	[data release];
+	
+	if (res == NSImageRepLoadStatusUnknownType)
+		g_warning ("unknown type");
+	if (res == NSImageRepLoadStatusReadingHeader)
+		g_warning ("reading header");
+	if (res == NSImageRepLoadStatusWillNeedAllData)
+		g_warning ("need all data");
+	if (res == NSImageRepLoadStatusInvalidData)
+		g_warning ("invalid data");
+	if (res == NSImageRepLoadStatusUnexpectedEOF)
+		g_warning ("unexpected eof");
+	if (res == NSImageRepLoadStatusCompleted)
+		g_warning ("completed");
 }
 
 MoonPixbuf*
 MoonPixbufLoaderCocoa::GetPixbuf ()
 {
-	return new MoonPixbufCocoa (this->data, FALSE);
+	return new MoonPixbufCocoa (this->image, FALSE);
 }
 
 
 MoonPixbufCocoa::MoonPixbufCocoa (void *pixbuf, bool crc_error)
 {
-	this->image = [[NSBitmapImageRep alloc] initWithData: [(NSData *) pixbuf retain]];
+	this->image = [pixbuf retain];
 }
 
 MoonPixbufCocoa::~MoonPixbufCocoa ()
@@ -58,13 +91,13 @@ MoonPixbufCocoa::~MoonPixbufCocoa ()
 gint
 MoonPixbufCocoa::GetWidth ()
 {
-	return ((NSBitmapImageRep *) image).size.width;
+	return (int) ((NSBitmapImageRep *) image).size.width;
 }
 
 gint
 MoonPixbufCocoa::GetHeight ()
 {
-	return ((NSBitmapImageRep *) image).size.height;
+	return (int) ((NSBitmapImageRep *) image).size.height;
 }
 
 gint
@@ -76,7 +109,7 @@ MoonPixbufCocoa::GetRowStride ()
 gint
 MoonPixbufCocoa::GetNumChannels ()
 {
-	return ((NSBitmapImageRep *) image).numberOfPlanes;
+	return 4;
 }
 
 guchar*
