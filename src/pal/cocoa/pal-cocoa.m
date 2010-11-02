@@ -64,7 +64,7 @@ public:
 
         virtual bool IsEnter ()
         {
-		return FALSE;
+		return YES;
         }
 
 private:
@@ -115,7 +115,7 @@ public:
 
         virtual bool IsEnter ()
         {
-		return false;
+		return NO;
         }
 
 private:
@@ -175,7 +175,7 @@ public:
 
         int GetButton ()
         {
-		return [event buttonNumber];
+		return [event buttonNumber] + 1;
         }
 
         virtual int GetNumberOfClicks ()
