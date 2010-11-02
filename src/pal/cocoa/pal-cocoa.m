@@ -14,6 +14,7 @@
 
 #include <cairo.h>
 
+#include "MoonCocoaEvent.h"
 #include "MoonCocoaTimer.h"
 
 #include <AppKit/AppKit.h>
@@ -22,7 +23,7 @@ using namespace Moonlight;
 
 class MoonCrossingEventEnteredCocoa : public MoonCrossingEvent {
 public:
-        MoonCrossingEventEnteredCocoa (NSEvent *event)
+        MoonCrossingEventEnteredCocoa (MoonCocoaEvent *event)
         {
 		this->event = [event retain];
         }
@@ -44,7 +45,8 @@ public:
 
         virtual Moonlight::Point GetPosition ()
         {
-		NSPoint loc = [event locationInWindow];
+		NSPoint loc = [event.view convertPoint: [event.event locationInWindow] fromView: nil];
+		loc.y = event.view.frame.size.height - loc.y;
 		return Moonlight::Point (loc.x, loc.y);
         }
 
@@ -68,12 +70,12 @@ public:
         }
 
 private:
-        NSEvent *event;
+        MoonCocoaEvent *event;
 };
 
 class MoonCrossingEventExitedCocoa : public MoonCrossingEvent {
 public:
-        MoonCrossingEventExitedCocoa (NSEvent *event)
+        MoonCrossingEventExitedCocoa (MoonCocoaEvent *event)
         {
                 this->event = [event retain];
         }
@@ -95,7 +97,8 @@ public:
 
         virtual Moonlight::Point GetPosition ()
         {
-		NSPoint loc = [event locationInWindow];
+		NSPoint loc = [event.view convertPoint: [event.event locationInWindow] fromView: nil];
+		loc.y = event.view.frame.size.height - loc.y;
                 return Moonlight::Point (loc.x, loc.y);
         }
 
@@ -119,12 +122,12 @@ public:
         }
 
 private:
-        NSEvent *event;
+        MoonCocoaEvent *event;
 };
 
 class MoonButtonEventCocoa : public MoonButtonEvent {
 public:
-        MoonButtonEventCocoa (NSEvent *event)
+        MoonButtonEventCocoa (MoonCocoaEvent *event)
         {
 		this->event = [event retain];
         }
@@ -146,13 +149,14 @@ public:
 
         virtual Moonlight::Point GetPosition ()
         {
-		NSPoint loc = [event locationInWindow];
+		NSPoint loc = [event.view convertPoint: [event.event locationInWindow] fromView: nil];
+		loc.y = event.view.frame.size.height - loc.y;
                 return Moonlight::Point (loc.x, loc.y);
         }
 
         virtual double GetPressure ()
         {
-		return [event pressure];
+		return [event.event pressure];
         }
 
         virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
@@ -167,7 +171,7 @@ public:
 
         bool IsRelease ()
         {
-		if ([event type] == NSLeftMouseUp || [event type] == NSRightMouseUp || [event type] == NSOtherMouseUp)
+		if ([event.event type] == NSLeftMouseUp || [event.event type] == NSRightMouseUp || [event.event type] == NSOtherMouseUp)
 			return YES;
 
 		return NO;
@@ -175,21 +179,21 @@ public:
 
         int GetButton ()
         {
-		return [event buttonNumber] + 1;
+		return [event.event buttonNumber] + 1;
         }
 
         virtual int GetNumberOfClicks ()
         {
-		return [event clickCount];
+		return [event.event clickCount];
         }
 
 private:
-        NSEvent *event;
+        MoonCocoaEvent *event;
 };
 
 class MoonMotionEventCocoa : public MoonMotionEvent {
 public:
-        MoonMotionEventCocoa (NSEvent *event)
+        MoonMotionEventCocoa (MoonCocoaEvent *event)
         {
 		this->event = [event retain];
         }
@@ -211,13 +215,14 @@ public:
 
         virtual Moonlight::Point GetPosition ()
         {
-		NSPoint loc = [event locationInWindow];
+		NSPoint loc = [event.view convertPoint: [event.event locationInWindow] fromView: nil];
+		loc.y = event.view.frame.size.height - loc.y;
                 return Moonlight::Point (loc.x, loc.y);
         }
 
         virtual double GetPressure ()
         {
-		return [event pressure];
+		return [event.event pressure];
         }
 
         virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
@@ -231,7 +236,7 @@ public:
         }
 
 private:
-        NSEvent *event;
+        MoonCocoaEvent *event;
 };
 
 /// our windowing system
@@ -365,9 +370,9 @@ MoonWindowingSystemCocoa::CreateIMContext ()
 MoonEvent*
 MoonWindowingSystemCocoa::CreateEventFromPlatformEvent (gpointer platformEvent)
 {
-	NSEvent *evt = (NSEvent *) platformEvent;
+	MoonCocoaEvent *evt = (MoonCocoaEvent *) platformEvent;
 
-	switch ([evt type]) {
+	switch ([evt.event type]) {
 		case NSMouseEntered:
 			return new MoonCrossingEventEnteredCocoa (evt);
 		case NSMouseExited:

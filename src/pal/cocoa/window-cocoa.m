@@ -25,6 +25,7 @@
 #include "enums.h"
 #include "context-cairo.h"
 
+#include "MoonCocoaEvent.h"
 #include "MoonNSView.h"
 #include <AppKit/AppKit.h>
 
@@ -256,7 +257,7 @@ MoonWindowCocoa::CreateCairoSurface ()
 void
 MoonWindowCocoa::ButtonPressEvent (void *evt)
 {
-	NSEvent *event = (NSEvent *) evt;
+	MoonCocoaEvent *event = [[MoonCocoaEvent alloc] initWithEvent: (NSEvent *) evt view: (MoonNSView *) this->view];
 	SetCurrentDeployment ();
 
 	if (surface) {
@@ -264,13 +265,14 @@ MoonWindowCocoa::ButtonPressEvent (void *evt)
 		surface->HandleUIButtonPress (mevent);
 		delete mevent;
 	}
+	[event release];
 }
 
 /* FIXME: ButtonPress nad ButtonRelease need button numbers swizzled here for guarding and in the event dispatch */
 void
 MoonWindowCocoa::ButtonReleaseEvent (void *evt)
 {
-	NSEvent *event = (NSEvent *) evt;
+	MoonCocoaEvent *event = [[MoonCocoaEvent alloc] initWithEvent: (NSEvent *) evt view: (MoonNSView *) this->view];
 	SetCurrentDeployment ();
 
 	if (surface) {
@@ -278,12 +280,13 @@ MoonWindowCocoa::ButtonReleaseEvent (void *evt)
 		surface->HandleUIButtonRelease (mevent);
 		delete mevent;
 	}
+	[event release];
 }
 
 void
 MoonWindowCocoa::MotionEvent (void *evt)
 {
-	NSEvent *event = (NSEvent *) evt;
+	MoonCocoaEvent *event = [[MoonCocoaEvent alloc] initWithEvent: (NSEvent *) evt view: (MoonNSView *) this->view];
 	SetCurrentDeployment ();
 
 	if (surface) {
@@ -291,12 +294,13 @@ MoonWindowCocoa::MotionEvent (void *evt)
 		surface->HandleUIMotion (mevent);
 		delete mevent;
 	}
+	[event release];
 }
 
 void
 MoonWindowCocoa::MouseEnteredEvent (void *evt)
 {
-	NSEvent *event = (NSEvent *) evt;
+	MoonCocoaEvent *event = [[MoonCocoaEvent alloc] initWithEvent: (NSEvent *) evt view: (MoonNSView *) this->view];
 	SetCurrentDeployment ();
 
 	if (surface) {
@@ -304,12 +308,13 @@ MoonWindowCocoa::MouseEnteredEvent (void *evt)
 		surface->HandleUICrossing (mevent);
 		delete mevent;
 	}
+	[event release];
 }
 
 void
 MoonWindowCocoa::MouseExitedEvent (void *evt)
 {
-	NSEvent *event = (NSEvent *) evt;
+	MoonCocoaEvent *event = [[MoonCocoaEvent alloc] initWithEvent: (NSEvent *) evt view: (MoonNSView *) this->view];
 	SetCurrentDeployment ();
 
 	if (surface) {
@@ -317,6 +322,7 @@ MoonWindowCocoa::MouseExitedEvent (void *evt)
 		surface->HandleUICrossing (mevent);
 		delete mevent;
 	}
+	[event release];
 }
 
 void

@@ -93,6 +93,7 @@ libmoon_include_headers = 	\
 	pal/gtk/pixbuf-gtk.h	\
 	pal/gtk/window-gtk.h	\
 	pal/gtk/debug-ui-gtk.h	\
+	pal/cocoa/MoonCocoaEvent.h	\
 	pal/cocoa/MoonCocoaTimer.h	\
 	pal/cocoa/MoonNSView.h		\
 	pal/cocoa/clipboard-cocoa.h	\
@@ -308,6 +309,7 @@ libmoon_la_OBJCXXFLAGS = $(AM_OBJCXXFLAGS)
 
 libmoon_la_SOURCES += \
 	pal/cocoa/MoonNSView.m		\
+	pal/cocoa/MoonCocoaEvent.m	\
 	pal/cocoa/MoonCocoaTimer.m	\
 	pal/cocoa/clipboard-cocoa.m	\
 	pal/cocoa/config-dialog-cocoa.m\
