@@ -314,8 +314,6 @@ MoonWindowingSystemCocoa::AddTimeout (gint priority, gint ms, MoonSourceFunc tim
 	mtimer.userInfo = data;
 
 	[[NSRunLoop mainRunLoop] addTimer: timer forMode: NSRunLoopCommonModes];
-
-	[timer autorelease];
 	// FIXME: 64-bit evil
 	return (guint) timer;
 }
@@ -326,8 +324,9 @@ MoonWindowingSystemCocoa::RemoveTimeout (guint timeoutId)
 	// FIXME: 64-bit evil
 	NSTimer *timer = (NSTimer *) timeoutId;
 
-	[timer invalidate];
 	[[timer userInfo] autorelease];
+	[timer invalidate];
+	[timer autorelease];
 }
 
 guint
@@ -352,14 +351,15 @@ MoonWindowingSystemCocoa::RemoveIdle (guint idle_id)
 	// FIXME: 64-bit evil
 	NSTimer *timer = (NSTimer *) idle_id;
 
-	[timer invalidate];
 	[[timer userInfo] autorelease];
+	[timer invalidate];
+	[timer autorelease];
 }
 
 MoonIMContext*
 MoonWindowingSystemCocoa::CreateIMContext ()
 {
-	g_assert_not_reached ();
+	return new MoonIMContextCocoa ();
 }
 
 MoonEvent*
@@ -392,14 +392,15 @@ MoonWindowingSystemCocoa::CreateEventFromPlatformEvent (gpointer platformEvent)
 guint
 MoonWindowingSystemCocoa::GetCursorBlinkTimeout (MoonWindow *moon_window)
 {
-	g_assert_not_reached ();
+	printf ("implement me: GetCursorBlinkTimeout\n");
+	return 5;
 }
 
 
 MoonPixbufLoader*
 MoonWindowingSystemCocoa::CreatePixbufLoader (const char *imageType)
 {
-	g_assert_not_reached ();
+	return new MoonPixbufLoaderCocoa (imageType);
 }
 
 void

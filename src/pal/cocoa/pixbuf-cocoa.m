@@ -8,80 +8,81 @@
 
 #include "pixbuf-cocoa.h"
 
+#import <AppKit/AppKit.h>
+
 using namespace Moonlight;
 
 MoonPixbufLoaderCocoa::MoonPixbufLoaderCocoa (const char *imageType)
 {
-	g_assert_not_reached ();
+	this->data = [NSMutableData dataWithCapacity: getpagesize ()];
 }
 
 MoonPixbufLoaderCocoa::MoonPixbufLoaderCocoa ()
 {
-	g_assert_not_reached ();
+	this->data = [NSMutableData dataWithCapacity: getpagesize ()];
 }
 
 MoonPixbufLoaderCocoa::~MoonPixbufLoaderCocoa ()
 {
-	g_assert_not_reached ();
+	[this->data release];
 }
 
 void
 MoonPixbufLoaderCocoa::Write (const guchar *buffer, int buflen, MoonError **error)
 {
-	g_assert_not_reached ();
+	[this->data appendBytes: buffer length: buflen];
 }
 
 void
 MoonPixbufLoaderCocoa::Close (MoonError **error)
 {
-	g_assert_not_reached ();
 }
 
 MoonPixbuf*
 MoonPixbufLoaderCocoa::GetPixbuf ()
 {
-	g_assert_not_reached ();
+	return new MoonPixbufCocoa (this->data, FALSE);
 }
 
 
 MoonPixbufCocoa::MoonPixbufCocoa (void *pixbuf, bool crc_error)
 {
-	g_assert_not_reached ();
+	this->image = [[NSBitmapImageRep alloc] initWithData: [(NSData *) pixbuf retain]];
 }
 
 MoonPixbufCocoa::~MoonPixbufCocoa ()
 {
-	g_assert_not_reached ();
+	[this->image release];
 }
 
 gint
 MoonPixbufCocoa::GetWidth ()
 {
-	g_assert_not_reached ();
+	return ((NSBitmapImageRep *) image).size.width;
 }
 
 gint
 MoonPixbufCocoa::GetHeight ()
 {
-	g_assert_not_reached ();
+	return ((NSBitmapImageRep *) image).size.height;
 }
 
 gint
 MoonPixbufCocoa::GetRowStride ()
 {
-	g_assert_not_reached ();
+	return ((NSBitmapImageRep *) image).bytesPerRow;
 }
 
 gint
 MoonPixbufCocoa::GetNumChannels ()
 {
-	g_assert_not_reached ();
+	return ((NSBitmapImageRep *) image).numberOfPlanes;
 }
 
 guchar*
 MoonPixbufCocoa::GetPixels ()
 {
-	g_assert_not_reached ();
+	return ((NSBitmapImageRep *) image).bitmapData;
 }
 
 gpointer

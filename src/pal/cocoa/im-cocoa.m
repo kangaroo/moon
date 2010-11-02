@@ -16,84 +16,85 @@ using namespace Moonlight;
 
 MoonIMContextCocoa::MoonIMContextCocoa ()
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 MoonIMContextCocoa::~MoonIMContextCocoa ()
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 void
 MoonIMContextCocoa::SetUsePreedit (bool flag)
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 void
 MoonIMContextCocoa::SetClientWindow (MoonWindow* window)
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 bool
 MoonIMContextCocoa::FilterKeyPress (MoonKeyEvent* event)
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 void
 MoonIMContextCocoa::SetSurroundingText (const char *text, int offset, int length)
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 void
 MoonIMContextCocoa::Reset ()
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 
 void
 MoonIMContextCocoa::FocusIn ()
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 void
 MoonIMContextCocoa::FocusOut ()
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 void
 MoonIMContextCocoa::SetCursorLocation (Rect r)
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 void
 MoonIMContextCocoa::SetRetrieveSurroundingCallback (MoonCallback cb, gpointer data)
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 void
 MoonIMContextCocoa::SetDeleteSurroundingCallback (MoonCallback cb, gpointer data)
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 void
 MoonIMContextCocoa::SetCommitCallback (MoonCallback cb, gpointer data)
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
 }
 
 gpointer
 MoonIMContextCocoa::GetPlatformIMContext ()
 {
-	g_assert_not_reached ();
+	printf ("implement me: MoonIMContextCocoa\n");
+	return NULL;
 }
 

@@ -21,8 +21,7 @@ public:
 	virtual gpointer GetPlatformPixbuf ();
 
 private:
-	bool crc_error;
-	void *pixbuf;
+	void *image;
 };
 
 class MoonPixbufLoaderCocoa : public MoonPixbufLoader {
@@ -36,7 +35,7 @@ public:
 	virtual MoonPixbuf *GetPixbuf ();
 
 private:
-	bool crc_error;
+	void *data;
 };
 
 };
