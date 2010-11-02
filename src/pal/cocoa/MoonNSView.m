@@ -35,6 +35,16 @@
 	moonwindow->MouseExitedEvent (event);
 }
 
+- (void)keyDown: (NSEvent *) event
+{
+	moonwindow->KeyDownEvent (event);
+}
+
+- (void)keyUp: (NSEvent *) event
+{
+	moonwindow->KeyUpEvent (event);
+}
+
 - (void) setFrame: (NSRect) frame {
 	[super setFrame: frame];
 	[self removeTrackingRect: trackingrect];

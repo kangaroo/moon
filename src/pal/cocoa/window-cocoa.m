@@ -268,6 +268,34 @@ MoonWindowCocoa::ButtonPressEvent (void *evt)
 }
 
 void
+MoonWindowCocoa::KeyDownEvent (void *evt)
+{
+	MoonCocoaEvent *event = [[MoonCocoaEvent alloc] initWithEvent: (NSEvent *) evt view: (MoonNSView *) this->view];
+	SetCurrentDeployment ();
+
+	if (surface) {
+		MoonKeyEvent *mevent = (MoonKeyEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
+		surface->HandleUIKeyPress (mevent);
+		delete mevent;
+	}
+//	[event release];
+}
+
+void
+MoonWindowCocoa::KeyUpEvent (void *evt)
+{
+	MoonCocoaEvent *event = [[MoonCocoaEvent alloc] initWithEvent: (NSEvent *) evt view: (MoonNSView *) this->view];
+	SetCurrentDeployment ();
+
+	if (surface) {
+		MoonKeyEvent *mevent = (MoonKeyEvent*)runtime_get_windowing_system()->CreateEventFromPlatformEvent (event);
+		surface->HandleUIKeyRelease (mevent);
+		delete mevent;
+	}
+//	[event release];
+}
+
+void
 MoonWindowCocoa::ButtonReleaseEvent (void *evt)
 {
 	MoonCocoaEvent *event = [[MoonCocoaEvent alloc] initWithEvent: (NSEvent *) evt view: (MoonNSView *) this->view];

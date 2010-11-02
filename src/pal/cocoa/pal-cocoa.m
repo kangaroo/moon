@@ -21,222 +21,281 @@
 
 using namespace Moonlight;
 
+class MoonKeyEventCocoa : public MoonKeyEvent {
+public:
+	MoonKeyEventCocoa (MoonCocoaEvent *event)
+	{
+		this->event = [event retain];
+	}
+
+	virtual ~MoonKeyEventCocoa ()
+	{
+		[this->event release];
+	}
+
+	virtual MoonEvent* Clone ()
+	{
+		return new MoonKeyEventCocoa ((MoonCocoaEvent*) event);
+	}
+
+	virtual gpointer GetPlatformEvent ()
+	{
+		return event;
+	}
+
+	virtual Key GetSilverlightKey ()
+	{
+		g_assert_not_reached ();
+	}
+
+	virtual int GetPlatformKeycode ()
+	{
+		return [event.event keyCode];
+	}
+
+	virtual int GetPlatformKeyval ()
+	{
+		return [event.event keyCode];
+	}
+
+	virtual gunichar GetUnicode ()
+	{
+		return [[event.event characters] characterAtIndex: 0];
+	}
+
+	virtual MoonModifier GetModifiers ()
+	{
+		// FIXME map modifiers
+		return (MoonModifier) [event.event modifierFlags];
+	}
+
+
+	virtual bool IsModifier ()
+	{
+		// FIXME 
+		return NO;
+	}
+
+private:
+	MoonCocoaEvent *event;
+};
+
 class MoonCrossingEventEnteredCocoa : public MoonCrossingEvent {
 public:
-        MoonCrossingEventEnteredCocoa (MoonCocoaEvent *event)
-        {
+	MoonCrossingEventEnteredCocoa (MoonCocoaEvent *event)
+	{
 		this->event = [event retain];
-        }
+	}
 
-        virtual ~MoonCrossingEventEnteredCocoa ()
-        {
+	virtual ~MoonCrossingEventEnteredCocoa ()
+	{
 		[event release];
-        }
+	}
 
-        virtual MoonEvent* Clone ()
-        {
-                return new MoonCrossingEventEnteredCocoa (event);
-        }
+	virtual MoonEvent* Clone ()
+	{
+		return new MoonCrossingEventEnteredCocoa (event);
+	}
 
-        virtual gpointer GetPlatformEvent ()
-        {
-                return event;
-        }
+	virtual gpointer GetPlatformEvent ()
+	{
+		return event;
+	}
 
-        virtual Moonlight::Point GetPosition ()
-        {
+	virtual Moonlight::Point GetPosition ()
+	{
 		NSPoint loc = [event.view convertPoint: [event.event locationInWindow] fromView: nil];
 		loc.y = event.view.frame.size.height - loc.y;
 		return Moonlight::Point (loc.x, loc.y);
-        }
+	}
 
-        virtual double GetPressure ()
-        {
-                return 0.0;
-        }
+	virtual double GetPressure ()
+	{
+		return 0.0;
+	}
 
-        virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
-        {
-        }
+	virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
+	{
+	}
 
-        virtual MoonModifier GetModifiers ()
-        {
-                g_assert_not_reached ();
-        }
+	virtual MoonModifier GetModifiers ()
+	{
+		g_assert_not_reached ();
+	}
 
-        virtual bool IsEnter ()
-        {
+	virtual bool IsEnter ()
+	{
 		return YES;
-        }
+	}
 
 private:
-        MoonCocoaEvent *event;
+	MoonCocoaEvent *event;
 };
 
 class MoonCrossingEventExitedCocoa : public MoonCrossingEvent {
 public:
-        MoonCrossingEventExitedCocoa (MoonCocoaEvent *event)
-        {
-                this->event = [event retain];
-        }
+	MoonCrossingEventExitedCocoa (MoonCocoaEvent *event)
+	{
+		this->event = [event retain];
+	}
 
-        virtual ~MoonCrossingEventExitedCocoa ()
-        {
+	virtual ~MoonCrossingEventExitedCocoa ()
+	{
 		[event release];
-        }
+	}
 
-        virtual MoonEvent* Clone ()
-        {
-                return new MoonCrossingEventExitedCocoa (event);
-        }
+	virtual MoonEvent* Clone ()
+	{
+		return new MoonCrossingEventExitedCocoa (event);
+	}
 
-        virtual gpointer GetPlatformEvent ()
-        {
-                return event;
-        }
+	virtual gpointer GetPlatformEvent ()
+	{
+		return event;
+	}
 
-        virtual Moonlight::Point GetPosition ()
-        {
+	virtual Moonlight::Point GetPosition ()
+	{
 		NSPoint loc = [event.view convertPoint: [event.event locationInWindow] fromView: nil];
 		loc.y = event.view.frame.size.height - loc.y;
-                return Moonlight::Point (loc.x, loc.y);
-        }
+		return Moonlight::Point (loc.x, loc.y);
+	}
 
-        virtual double GetPressure ()
-        {
-                return 0.0;
-        }
+	virtual double GetPressure ()
+	{
+		return 0.0;
+	}
 
-        virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
-        {
-        }
+	virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
+	{
+	}
 
-        virtual MoonModifier GetModifiers ()
-        {
-                g_assert_not_reached ();
-        }
+	virtual MoonModifier GetModifiers ()
+	{
+		g_assert_not_reached ();
+	}
 
-        virtual bool IsEnter ()
-        {
+	virtual bool IsEnter ()
+	{
 		return NO;
-        }
+	}
 
 private:
-        MoonCocoaEvent *event;
+	MoonCocoaEvent *event;
 };
 
 class MoonButtonEventCocoa : public MoonButtonEvent {
 public:
-        MoonButtonEventCocoa (MoonCocoaEvent *event)
-        {
+	MoonButtonEventCocoa (MoonCocoaEvent *event)
+	{
 		this->event = [event retain];
-        }
+	}
 
-        virtual ~MoonButtonEventCocoa ()
-        {
+	virtual ~MoonButtonEventCocoa ()
+	{
 		[event release];
-        }
+	}
 
-        virtual MoonEvent* Clone ()
-        {
-                return new MoonButtonEventCocoa (event);
-        }
+	virtual MoonEvent* Clone ()
+	{
+		return new MoonButtonEventCocoa (event);
+	}
 
-        virtual gpointer GetPlatformEvent ()
-        {
-                return event;
-        }
+	virtual gpointer GetPlatformEvent ()
+	{
+		return event;
+	}
 
-        virtual Moonlight::Point GetPosition ()
-        {
+	virtual Moonlight::Point GetPosition ()
+	{
 		NSPoint loc = [event.view convertPoint: [event.event locationInWindow] fromView: nil];
 		loc.y = event.view.frame.size.height - loc.y;
-                return Moonlight::Point (loc.x, loc.y);
-        }
+		return Moonlight::Point (loc.x, loc.y);
+	}
 
-        virtual double GetPressure ()
-        {
+	virtual double GetPressure ()
+	{
 		return [event.event pressure];
-        }
+	}
 
-        virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
-        {
+	virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
+	{
 		g_assert_not_reached ();
-        }
+	}
 
-        virtual MoonModifier GetModifiers ()
-        {
+	virtual MoonModifier GetModifiers ()
+	{
 		g_assert_not_reached ();
-        }
+	}
 
-        bool IsRelease ()
-        {
+	bool IsRelease ()
+	{
 		if ([event.event type] == NSLeftMouseUp || [event.event type] == NSRightMouseUp || [event.event type] == NSOtherMouseUp)
 			return YES;
 
 		return NO;
-        }
+	}
 
-        int GetButton ()
-        {
+	int GetButton ()
+	{
 		return [event.event buttonNumber] + 1;
-        }
+	}
 
-        virtual int GetNumberOfClicks ()
-        {
+	virtual int GetNumberOfClicks ()
+	{
 		return [event.event clickCount];
-        }
+	}
 
 private:
-        MoonCocoaEvent *event;
+	MoonCocoaEvent *event;
 };
 
 class MoonMotionEventCocoa : public MoonMotionEvent {
 public:
-        MoonMotionEventCocoa (MoonCocoaEvent *event)
-        {
+	MoonMotionEventCocoa (MoonCocoaEvent *event)
+	{
 		this->event = [event retain];
-        }
+	}
 
-        virtual ~MoonMotionEventCocoa ()
-        {
+	virtual ~MoonMotionEventCocoa ()
+	{
 		[event release];
-        }
+	}
 
-        virtual MoonEvent* Clone ()
-        {
-                return new MoonMotionEventCocoa (event);
-        }
+	virtual MoonEvent* Clone ()
+	{
+		return new MoonMotionEventCocoa (event);
+	}
 
-        virtual gpointer GetPlatformEvent ()
-        {
-                return event;
-        }
+	virtual gpointer GetPlatformEvent ()
+	{
+		return event;
+	}
 
-        virtual Moonlight::Point GetPosition ()
-        {
+	virtual Moonlight::Point GetPosition ()
+	{
 		NSPoint loc = [event.view convertPoint: [event.event locationInWindow] fromView: nil];
 		loc.y = event.view.frame.size.height - loc.y;
-                return Moonlight::Point (loc.x, loc.y);
-        }
+		return Moonlight::Point (loc.x, loc.y);
+	}
 
-        virtual double GetPressure ()
-        {
+	virtual double GetPressure ()
+	{
 		return [event.event pressure];
-        }
+	}
 
-        virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
-        {
+	virtual void GetStylusInfo (TabletDeviceType *type, bool *is_inverted)
+	{
 		g_assert_not_reached ();
-        }
+	}
 
-        virtual MoonModifier GetModifiers ()
-        {
+	virtual MoonModifier GetModifiers ()
+	{
 		g_assert_not_reached ();
-        }
+	}
 
 private:
-        MoonCocoaEvent *event;
+	MoonCocoaEvent *event;
 };
 
 /// our windowing system
@@ -397,8 +456,7 @@ MoonWindowingSystemCocoa::CreateEventFromPlatformEvent (gpointer platformEvent)
 guint
 MoonWindowingSystemCocoa::GetCursorBlinkTimeout (MoonWindow *moon_window)
 {
-	printf ("implement me: GetCursorBlinkTimeout\n");
-	return 5;
+	return 500;
 }
 
 

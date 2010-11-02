@@ -74,6 +74,8 @@ public:
 	void MotionEvent (gpointer evt);
 	void ButtonPressEvent (gpointer evt);
 	void ButtonReleaseEvent (gpointer evt);
+	void KeyDownEvent (gpointer evt);
+	void KeyUpEvent (gpointer evt);
 
 private:
 	unsigned char *backing_image_data;
